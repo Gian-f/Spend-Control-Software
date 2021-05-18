@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>dev.finance$</title>
+
+  <meta name="title" content="dev.finance$">
+  <meta name="description" content="Aplicação web de controle de finanças desenvolvida por Lucas Becker durante a MaratonaDiscover da Rocketseat. Listagem, cadastro, edição e remoção de transações, atualização dos valores de entrada, saída e total em tempo real, filtragem e ordenação das transações e download das informações em PDF.">
+  <meta name="keywords" content="HTML, HTML5, CSS, CSS3, JavaScript, JS, Web, Dev, Finances, Finanças,Rocketseat, MaratonaDiscover, site">
+  <meta name="author" content="Gian Felipe">
+  <meta name="theme-color" content="#2d4a22">
+
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <img id="logo" src="./assets/logo.svg" alt="Logo Dev Finances">
+  </header>
+  
+  <main class="container">
+    <section id="balance">
+      <h2 class="sr-only">Balanço</h2>
+      <div class="card">
+        <h3>
+          <span>Entradas</span>
+          <img src="./assets/income.svg" alt="Imagem de Entradas">
+        </h3>
+        <p id="incomeDisplay">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>
+          <span>Saídas</span>
+          <img src="./assets/expense.svg" alt="Imagem de Saídas">
+        </h3>
+        <p id="expenseDisplay">R$ 0,00</p>
+      </div>
+      <div class="card total">
+        <h3>
+          <span>Total</span>
+          <img src="./assets/total.svg" alt="Imagem de Total">
+        </h3>
+        <p id="totalDisplay">R$ 0,00</p>
+      </div>
+    </section>
+    <section id="transactions">
+      <h2 class="sr-only">Transações</h2>
+
+      <div class="actions">
+        <a 
+        href="#" 
+        class="button new"
+        onclick="Modal.toggle('add')"  
+        >
+          + Nova Transação
+        </a>
+        <a 
+          href="#" 
+          class="button clear"
+          onclick="Transaction.removeAll()"
+        >
+          Limpar Transações
+        </a>
+      </div>
+
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th onclick="Sort.description()" id="th-description">Descrição</th>
+            <th onclick="Sort.value()" id="th-value">Valor</th>
+            <th onclick="Sort.date()" id="th-date">Data</th>
+            <th id="th-search">
+              <label for="search" class="sr-only">Pesquisa</label>
+              <input type="search" id="search" name="search" autocomplete="off">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+
+      <div class="actions bottom">
+        <div class="json">
+          <a 
+          href="#"
+          class="button download"
+          onclick="Transaction.download(event)"  
+          >
+            Download JSON
+          </a>
+
+          <div class="button-wrapper">
+            <label for="upload" class="upload">
+              Upload JSON
+            </label>
+            <input
+              type="file"
+              onclick=""  
+              placeholder="Upload JSON"
+              title="Upload JSON"
+              name="upload"
+              id="upload"
+              accept=".json, application/json"
+            >
+          </div>
+        </div>
+
+        <a 
+        href="#"
+        class="button download"
+        onclick="Utils.createPDF(event)"  
+        >
+          Download PDF
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay add" onclick="Modal.overlayToggle(event)">
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Adicionar Transação</h2>
+        <form onsubmit="Form.submit(event, 'add')">
+          <div class="input-group">
+            <label 
+              class="sr-only" 
+              for="description"
+            >
+              Descrição
+            </label>
+            <input 
+              type="text" 
+              name="description" 
+              id="description" 
+              placeholder="Descrição"
+              maxlength="50"
+              minlength="3"
+              required
+            >
+            <span class="error"></span>
+          </div>
+          <div class="input-group">
+            <label 
+              class="sr-only" 
+              for="amount"
+            >
+              Valor
+            </label>
+            <input 
+              type="number" 
+              step="0.01"
+              name="amount" 
+              id="amount" 
+              placeholder="0,00"
+              min="-1000000.00"
+              max="1000000.00"
+              required
+            >
+            <span class="error"></span>
+            <small class="help">Use o sinal - (negativo) para despesas e , (vírgula) para casas decimais.</small>
+          </div>
+          <div class="input-group">
+            <label 
+              class="sr-only" 
+              for="date"
+            >
+              Data
+            </label>
+            <input 
+              type="date" 
+              name="date" 
+              id="date" 
+              placeholder="22/01/2021"
+              required
+            >
+            <span class="error"></span>
+          </div>
+          <div class="input-group actions">
+            <a 
+              href="#" 
+              class="button cancel"
+              onclick="Form.cancel('add')"  
+            >Cancelar</a>
+            <button type="submit">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay edit" onclick="Modal.overlayToggle(event)">
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Editar Transação</h2>
+        <form onsubmit="Form.submit(event, 'edit')" >
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>2021 - dev.finance$</p>
+    <p>Desenvolvido por <a href="https://gian-f" target="_blank" rel="noopener noreferrer">Gian</a> durante <br>a MaratonaDiscover da <a href="https://rocketseat.com.br/" target="_blank" rel="noopener noreferrer">Rocketseat</a>.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs" crossorigin="anonymous"></script>
+  <script src="./scripts.js"></script>
+</body>
+</html>
