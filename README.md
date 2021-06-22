@@ -24,7 +24,6 @@ Aplicação web de controle de finanças desenvolvida durante a MaratonaDiscover
 - [X] Download das transações em JSON utilizando Blob API
 - [X] Upload das transações em JSON utilizando FileReader API
 - [X] Download das informações em PDF utilizando jsPDF
-- [ ] Refatorar e simplificar
 
 ## Deploy
 O deploy foi realizado com o *github-pages* e está disponível [aqui](https://https://github.com/Gian-f/Dev-Finances).
