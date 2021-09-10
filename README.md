@@ -26,7 +26,7 @@ Aplicação web de controle de finanças desenvolvida durante a MaratonaDiscover
 - [X] Download das informações em PDF utilizando jsPDF
 
 ## Deploy
-O deploy foi realizado com o *github-pages* e está disponível [aqui](https://https://github.com/Gian-f/Dev-Finances).
+O deploy foi realizado com o *github-pages* e está disponível [aqui](https://gian-f.github.io/Spend-Control-Software/).
 
 ## License
 [MIT License](./LICENSE) | [Gian Felipe](https://github.com/Gian-f)
