@@ -452,7 +452,7 @@ const Utils = {
 
     doc.setFontSize(10);
     doc.setTextColor(150);
-    doc.text('https://lucasbecker.github.io/dev-finances/', 105, 285, null, null, "center");
+    doc.text('https://gian-f.github.io/dev-finances/', 105, 285, null, null, "center");
 
     doc.save(`devfinances-${todayName}.pdf`);
   }
